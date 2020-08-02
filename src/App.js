@@ -1,60 +1,106 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
+import { deepOrange, pink } from '@material-ui/core/colors';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import CreateTwoToneIcon from '@material-ui/icons/CreateTwoTone';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {file: '',imagePreviewUrl: ''};
+const useStyles = makeStyles((theme) => ({
+  customClasses: {
+    width: "100%",
+    height: "100%",
+    fontSize: "300px",
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: pink[100]
+  },
+  imgPreview: {
+    margin: "30px",
+    height: "400px",
+    width: "400px"
+  },
+  dropButtonDiv: {
+    marginTop: "-135px",
+    marginLeft: "35px"
+  }
+}));
+
+export default function App() {
+  const classes = useStyles();
+  const [file, setFile] = useState("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const _handleSubmit = e => {
+      e.preventDefault();
+      console.log('handle uploading-', file, "\n", imagePreviewUrl);
+      setAnchorEl(null);
   }
 
-  _handleSubmit(e) {
-    e.preventDefault();
-    // TODO: do something with -> this.state.file
-    console.log('handle uploading-', this.state.file, "\n", this.state.imagePreviewUrl);
+  const _handleImageChange = e => {
+      e.preventDefault();
+      let reader = new FileReader();
+      let file = e.target.files[0];
+      reader.onloadend = () => {
+          setFile(file);
+          setImagePreviewUrl(reader.result);
+      }
+      reader.readAsDataURL(file);
+      setAnchorEl(null);
   }
 
-  _handleImageChange(e) {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    }
-
-    reader.readAsDataURL(file)
+  const _removePhoto = e => {
+    setFile("");
+    setImagePreviewUrl("");
+    setAnchorEl(null);
   }
 
-  render() {
-    let {imagePreviewUrl} = this.state;
-    let $imagePreview = null;
-    if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} alt="upload"/>);
-    } else {
-      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
-    }
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    return (
-      <div className="previewComponent">
-        <form onSubmit={(e)=>this._handleSubmit(e)}>
-          <input className="fileInput" 
-            type="file" 
-            onChange={(e)=>this._handleImageChange(e)} />
-          <button className="submitButton" 
-            type="submit" 
-            onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>
-        </form>
-        <div className="imgPreview">
-          {$imagePreview}
-        </div>
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let $imagePreview = null;
+  if (imagePreviewUrl) {
+    $imagePreview = (<Avatar alt="user photo" src={imagePreviewUrl} className={classes.customClasses} />);
+  } else {
+    $imagePreview = (<Avatar className={classes.customClasses}>B</Avatar>);
+  }
+
+  return (
+    <div>
+      <div className={classes.imgPreview}>
+        {$imagePreview}
       </div>
-    )
-  }
+      <div className={classes.dropButtonDiv}>
+        <Button size="small" variant="contained" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+          <CreateTwoToneIcon /> Edit 
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem>
+            <form onSubmit={_handleSubmit}>
+              <input type="file" name="uploader" id="uploader" style={{display: "none"}} onChange={_handleImageChange} />
+              <label htmlFor="uploader">Upload a photo</label>                
+            </form>
+          </MenuItem>
+          <MenuItem>
+            <p style={{margin: "0px"}} onClick={_removePhoto}>Remove a photo</p>
+          </MenuItem>
+          <MenuItem>
+            <p style={{margin: "0px"}} type="submit" onClick={_handleSubmit}>Console Status</p>
+          </MenuItem>
+        </Menu>
+      </div>
+    </div>
+  )
 }
-
-export default App;
- 
