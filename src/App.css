@@ -1,38 +1,45 @@
-.App {
+h3 {
+  margin-left: 15px;
+}
+.fileInput {
+  border: 4px solid #d3d3d3;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 15px;
+  width: 85px;
+  cursor: pointer;
+}
+.imgPreview {
   text-align: center;
+  margin: 15px;
+  height: 400px;
+  width: 400px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50%;
+  overflow: hidden;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.imgPreview img {
+  width: 100%;
+  height: 100%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.previewText {
+  width: 100%;
+  margin-top: 190px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.submitButton {
+  padding: 12px;
+  margin-left: 10px;
+  background: #fff;
+  border: 4px solid #d3d3d3;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 10pt;
+  cursor: pointer;
 }
-
-.App-link {
-  color: #61dafb;
+.submitButton:hover {
+  background: #efefef;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.centerText {
+  text-align: center;
+  width: 500px;
 }
